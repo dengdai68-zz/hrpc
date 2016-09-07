@@ -21,13 +21,14 @@ public class ZookeeperServiceRegistryTest {
         ServiceObject serviceObject = new ServiceObject();
         serviceObject.setServiceName("testService");
         serviceObject.setServiceAddress("testServiceAddress");
+        serviceObject.setAppServer("testAppServer");
         registry.registry(serviceObject);
         Thread.sleep(400*1000);
     }
     @Test
     public void discovery() throws IOException {
         ZookeeperServiceDiscovery discovery = new ZookeeperServiceDiscovery();
-        String serviceAddress = discovery.discovery("testService");
+        String serviceAddress = discovery.discovery("testAppServer","testService");
         System.out.println(serviceAddress);
     }
     @Test

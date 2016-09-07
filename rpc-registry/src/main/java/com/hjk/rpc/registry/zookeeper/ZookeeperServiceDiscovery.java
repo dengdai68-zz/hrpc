@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
+import java.util.List;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,37 +27,21 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
     private LinkedHashMap<String,Vector<String>> serviceCacheMap = new LinkedHashMap();
 
     @Override
-    public String discovery(String serviceName) {
+    public String discovery(String appServer,String serviceName) {
         try {
-
+            String serviceKey = appServer + "/" + serviceName;
             //查找map是否缓存
-            Vector<String> services = serviceCacheMap.get(serviceName);
+            Vector<String> services = serviceCacheMap.get(serviceKey);
             if(services != null && services.size() > 0){
-                logger.debug("get address{} from cache!",serviceName);
+                logger.debug("get address{} from cache!",serviceKey);
                 return getRandomAddress(services);
             }
-            ZooKeeper zk = new ZooKeeper(RegistryConfig.zkAddress,RegistryConfig.sessionTimeout, new ServiceWatcher(serviceCacheMap),true);
-            //获取registry顶级节点
-            String registryPath = RegistryConfig.zkRegistryPath;
-            if (null == zk.exists(registryPath, false)) {
-                logger.error("create registry top node:{}", registryPath);
-                throw new NotFoundRegistryPathException("registry top node not found!");
-            }
-            //获取service子节点
-            String servicePath = registryPath + "/" + serviceName;
-            java.util.List<String> addressList = zk.getChildren(servicePath, false);
-            if (addressList == null || addressList.size() == 0) {
-                logger.warn("create registry top node:{}", registryPath);
-                throw new NotFoundServiceException("registry top node not found!");
-            }
-
             if(services == null){
                 services = new Vector<>();
             }
-            services.addAll(addressList);
-            serviceCacheMap.put(serviceName,services);
+            services.addAll(findServices(appServer,serviceName));
+            serviceCacheMap.put(serviceKey,services);
             return getRandomAddress(services);
-
         }catch (NotFoundRegistryPathException var0){
             throw var0;
         }catch (NotFoundServiceException var1){
@@ -64,6 +50,31 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
             logger.error("",e);
         }
         return null;
+    }
+
+    private List<String> findServices(String appServer, String serviceName) throws IOException, KeeperException, InterruptedException {
+        ZooKeeper zk = new ZooKeeper(RegistryConfig.zkAddress,RegistryConfig.sessionTimeout, new ServiceWatcher(serviceCacheMap),true);
+        //获取registry顶级节点
+        String registryPath = RegistryConfig.zkRegistryPath;
+        if (null == zk.exists(registryPath, false)) {
+            logger.error("not found registry top node:{}", registryPath);
+            throw new NotFoundRegistryPathException("registry top node not found!");
+        }
+        //获取系统节点
+        String appServerPath = registryPath + "/" + appServer;
+        if (null == zk.exists(appServerPath, false)) {
+            logger.error("not found appServer node:{}", appServerPath);
+            throw new NotFoundRegistryPathException("registry top node not found!");
+        }
+        //获取service子节点
+        String servicePath = appServerPath + "/" + serviceName;
+        List<String> addressList = zk.getChildren(servicePath, false);
+        if (addressList == null || addressList.size() == 0) {
+            logger.warn("not found server:{}", servicePath);
+            throw new NotFoundServiceException("registry top node not found!");
+        }
+        zk.close();
+        return addressList;
     }
 
     public String getRandomAddress(Vector<String> services){

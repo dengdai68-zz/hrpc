@@ -9,14 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rpc-core</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>hrpc</groupId>
-            <artifactId>rpc-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+    <artifactId>rpc-spring</artifactId>
 
 
 </project>

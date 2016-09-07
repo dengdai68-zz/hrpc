@@ -12,6 +12,6 @@ public interface ServiceDiscovery {
      *
      * 根据服务名称,获取服务ip列表
      */
-    String discovery(String serviceName);
+    String discovery(String appServer,String serviceName);
 
 }
