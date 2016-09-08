@@ -2,13 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:rpc="http://com.hjk.rpc/schema/rpc"
+       xmlns:context="http://www.springframework.org/schema/context"
+
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://com.hjk.rpc/schema/rpc http://com.hjk.rpc/schema/rpc.xsd">
 
-    <bean class="com.hjk.rpc.server.ServerInitializer"/>
+    <context:property-placeholder location="rpc.properties"/>
 
-    <rpc:zookeeper zkAddress="127.0.0.1:2181" sessionTimeoutInMillis="3000"/>
+    <bean class="com.hjk.rpc.spring.ContainerInitializer"/>
+
+    <rpc:zookeeper zkAddress="${zkAddress}" sessionTimeoutInMillis="${zkSessionTimeout}"/>
 
     <rpc:server server="testServer" port="1234">
         <rpc:service id="interface1" class="xxx"/>

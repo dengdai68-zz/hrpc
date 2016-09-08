@@ -1,20 +1,18 @@
 package com.hjk.rpc.registry.zookeeper;
 
-import java.io.IOException;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
-
-import java.util.List;
+import com.hjk.rpc.core.discovery.ServiceDiscovery;
+import com.hjk.rpc.core.exception.NotFoundServiceException;
+import com.hjk.rpc.core.exception.NotFoundZookeeperPathException;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hjk.rpc.core.discovery.ServiceDiscovery;
-import com.hjk.rpc.core.exception.NotFoundZookeeperPathException;
-import com.hjk.rpc.core.exception.NotFoundServiceException;
-import com.hjk.rpc.registry.RegistryConfig;
+import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by hanjk on 16/9/7.
@@ -24,6 +22,12 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceDiscovery.class);
 
     private ConcurrentHashMap<String,Vector<String>> serviceCacheMap = new ConcurrentHashMap();
+
+    private ZkBean zkBean;
+
+    public ZookeeperServiceDiscovery(ZkBean zkBean) {
+        this.zkBean = zkBean;
+    }
 
     @Override
     public String discovery(String appServer,String serviceName) {
@@ -52,9 +56,9 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
     }
 
     private List<String> findServices(String appServer, String serviceName) throws IOException, KeeperException, InterruptedException {
-        ZooKeeper zk = new ZooKeeper(RegistryConfig.zkAddress,RegistryConfig.sessionTimeout, new ServiceWatcher(serviceCacheMap),true);
+        ZooKeeper zk = new ZooKeeper(zkBean.getZkAddress(),zkBean.getSessionTimeoutInMillis(), new ServiceWatcher(serviceCacheMap),true);
         //获取registry顶级节点
-        String registryPath = RegistryConfig.zkRegistryPath;
+        String registryPath = zkBean.getZkRegistryPath();
         if (null == zk.exists(registryPath, false)) {
             logger.error("not found registry top node:{}", registryPath);
             throw new NotFoundZookeeperPathException("registry top node not found!");
@@ -84,7 +88,7 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
     }
 
     private static class SingletonHolder {
-        private static final ServiceDiscovery INSTANCE = new ZookeeperServiceDiscovery();
+        private static final ServiceDiscovery INSTANCE = new ZookeeperServiceDiscovery(null);
     }
 
     public static final ServiceDiscovery getInstance() {

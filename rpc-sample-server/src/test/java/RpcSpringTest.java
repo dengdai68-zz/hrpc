@@ -11,8 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class RpcSpringTest {
     @Test
     public void registrySpring(){
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring" +
-                "-rpc.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-rpc.xml");
         Object clientBean= ctx.getBeansOfType(ClientBean.class);
         Object serverBean= ctx.getBeansOfType(ServerBean.class);
         Object zookeeperBean= ctx.getBeansOfType(ZookeeperBean.class);

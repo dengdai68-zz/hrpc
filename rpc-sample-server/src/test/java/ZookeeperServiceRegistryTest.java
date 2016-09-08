@@ -27,7 +27,7 @@ public class ZookeeperServiceRegistryTest {
     }
     @Test
     public void discovery() throws IOException {
-        ZookeeperServiceDiscovery discovery = new ZookeeperServiceDiscovery();
+        ZookeeperServiceDiscovery discovery = new ZookeeperServiceDiscovery(null);
         String serviceAddress = discovery.discovery("testAppServer","testService");
         System.out.println(serviceAddress);
     }

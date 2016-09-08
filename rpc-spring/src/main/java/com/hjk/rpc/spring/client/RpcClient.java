@@ -1,4 +1,4 @@
-package com.hjk.rpc.client;
+package com.hjk.rpc.spring.client;
 
 import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;

@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hjk.rpc.common.bean.ServiceObject;
 import com.hjk.rpc.core.registry.ServiceRegistry;
-import com.hjk.rpc.registry.RegistryConfig;
 
 /**
  * Created by hanjk on 16/9/7.
@@ -22,9 +21,11 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
 
     private ZooKeeper zk;
 
-    public ZookeeperServiceRegistry() throws IOException {
+    public ZookeeperServiceRegistry(){
+    }
 
-        zk = new ZooKeeper(RegistryConfig.zkAddress,RegistryConfig.sessionTimeout,null);
+    public ZookeeperServiceRegistry(ZkBean zkbean) throws IOException {
+        zk = new ZooKeeper(zkbean.getZkAddress(),zkbean.getSessionTimeoutInMillis(),null);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
         try {
             serviceObject.validate();
             //创建registry顶级节点
-            String registryPath = RegistryConfig.zkRegistryPath;
+            String registryPath = "rpc_registry";
             keeperCreateNode(registryPath,null,CreateMode.PERSISTENT);
             //创建APPServer节点
             String appServerPath = registryPath + "/" + serviceObject.getAppServer();

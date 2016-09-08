@@ -1,4 +1,4 @@
-package com.hjk.rpc.client;
+package com.hjk.rpc.spring.client;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
