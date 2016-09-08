@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rpc="http://com.hjk.rpc/schema/rpc"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://com.hjk.rpc/schema/rpc http://com.hjk.rpc/schema/rpc.xsd">
+
+    <bean class="com.hjk.rpc.server.ServerInitializer"/>
+
+    <rpc:zookeeper zkAddress="127.0.0.1:2181" sessionTimeoutInMillis="3000"/>
+
+    <rpc:server server="testServer" port="1234">
+        <rpc:service id="interface1" class="xxx"/>
+        <rpc:service id="interface2" class="xxx"/>
+    </rpc:server>
+
+    <rpc:client server="testServer">
+        <rpc:interface id="interface1" class="xxx"/>
+        <rpc:interface id="interface2" class="xxx"/>
+    </rpc:client>
+
+</beans>

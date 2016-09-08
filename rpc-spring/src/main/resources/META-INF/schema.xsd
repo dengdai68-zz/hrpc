@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://com.hjk.rpc/schema/rpc"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://com.hjk.rpc/schema/rpc"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <xsd:element name="zookeeper">
+        <xsd:complexType>
+            <xsd:attribute name="zkAddress" type="xsd:string" use="required"/>
+            <xsd:attribute name="sessionTimeoutInMillis" type="xsd:int" use="optional"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="server">
+        <xsd:complexType>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:element ref="service"/>
+            </xsd:choice>
+            <xsd:attribute name="server" type="xsd:string" use="required"/>
+            <xsd:attribute name="port" type="xsd:int" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="client">
+        <xsd:complexType>
+            <xsd:choice minOccurs="1" maxOccurs="unbounded">
+                <xsd:element ref="interface"/>
+            </xsd:choice>
+            <xsd:attribute name="server" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="interface">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="class" type="xsd:string" use="required"/>
+            <xsd:attribute name="timeoutInMillis" type="xsd:string" use="optional" default="0"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="service">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="class" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

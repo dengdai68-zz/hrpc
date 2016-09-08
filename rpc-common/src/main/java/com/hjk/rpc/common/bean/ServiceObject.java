@@ -1,4 +1,4 @@
-package com.hjk.rpc.core;
+package com.hjk.rpc.common.bean;
 
 import com.hjk.rpc.common.utils.StringUtil;
 

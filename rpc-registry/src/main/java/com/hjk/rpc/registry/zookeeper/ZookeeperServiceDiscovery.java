@@ -1,8 +1,8 @@
 package com.hjk.rpc.registry.zookeeper;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hjk.rpc.core.discovery.ServiceDiscovery;
-import com.hjk.rpc.core.exception.NotFoundRegistryPathException;
+import com.hjk.rpc.core.exception.NotFoundZookeeperPathException;
 import com.hjk.rpc.core.exception.NotFoundServiceException;
 import com.hjk.rpc.registry.RegistryConfig;
 
@@ -23,8 +23,7 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
 
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceDiscovery.class);
 
-
-    private LinkedHashMap<String,Vector<String>> serviceCacheMap = new LinkedHashMap();
+    private ConcurrentHashMap<String,Vector<String>> serviceCacheMap = new ConcurrentHashMap();
 
     @Override
     public String discovery(String appServer,String serviceName) {
@@ -42,7 +41,7 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
             services.addAll(findServices(appServer,serviceName));
             serviceCacheMap.put(serviceKey,services);
             return getRandomAddress(services);
-        }catch (NotFoundRegistryPathException var0){
+        }catch (NotFoundZookeeperPathException var0){
             throw var0;
         }catch (NotFoundServiceException var1){
             throw var1;
@@ -58,13 +57,13 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
         String registryPath = RegistryConfig.zkRegistryPath;
         if (null == zk.exists(registryPath, false)) {
             logger.error("not found registry top node:{}", registryPath);
-            throw new NotFoundRegistryPathException("registry top node not found!");
+            throw new NotFoundZookeeperPathException("registry top node not found!");
         }
         //获取系统节点
         String appServerPath = registryPath + "/" + appServer;
         if (null == zk.exists(appServerPath, false)) {
             logger.error("not found appServer node:{}", appServerPath);
-            throw new NotFoundRegistryPathException("registry top node not found!");
+            throw new NotFoundZookeeperPathException("registry top node not found!");
         }
         //获取service子节点
         String servicePath = appServerPath + "/" + serviceName;
@@ -83,4 +82,13 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
         }
         return services.get(ThreadLocalRandom.current().nextInt(services.size()));
     }
+
+    private static class SingletonHolder {
+        private static final ServiceDiscovery INSTANCE = new ZookeeperServiceDiscovery();
+    }
+
+    public static final ServiceDiscovery getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
 }

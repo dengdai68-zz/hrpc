@@ -1,6 +1,6 @@
 package com.hjk.rpc.core.registry;
 
-import com.hjk.rpc.core.ServiceObject;
+import com.hjk.rpc.common.bean.ServiceObject;
 
 /**
  * 服务注册接口

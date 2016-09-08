@@ -15,6 +15,9 @@
         <module>rpc-server</module>
         <module>rpc-common</module>
         <module>rpc-spring</module>
+        <module>rpc-sample-server</module>
+        <module>rpc-sample-client</module>
+        <module>rpc-sample-api</module>
     </modules>
     <dependencyManagement>
         <dependencies>

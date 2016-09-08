@@ -9,7 +9,7 @@ import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hjk.rpc.core.ServiceObject;
+import com.hjk.rpc.common.bean.ServiceObject;
 import com.hjk.rpc.core.registry.ServiceRegistry;
 import com.hjk.rpc.registry.RegistryConfig;
 

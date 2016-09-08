@@ -6,7 +6,7 @@ import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.junit.Test;
 
-import com.hjk.rpc.core.ServiceObject;
+import com.hjk.rpc.common.bean.ServiceObject;
 import com.hjk.rpc.registry.zookeeper.ZookeeperServiceRegistry;
 
 import java.io.IOException;
