@@ -62,7 +62,7 @@ public class InterfaceBean implements FactoryBean<Object>{
         try {
             return Class.forName(clazz);
         } catch (ClassNotFoundException e) {
-            return null;
+            return Object.class;
         }
     }
 

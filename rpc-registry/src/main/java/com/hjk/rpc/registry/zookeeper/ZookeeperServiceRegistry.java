@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
@@ -25,7 +27,13 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
     }
 
     public ZookeeperServiceRegistry(ZkBean zkbean) throws IOException {
-        zk = new ZooKeeper(zkbean.getZkAddress(),zkbean.getSessionTimeoutInMillis(),null);
+        zk = new ZooKeeper(zkbean.getZkAddress(), zkbean.getSessionTimeoutInMillis(), new Watcher() {
+
+            @Override
+            public void process(WatchedEvent watchedEvent) {
+
+            }
+        });
     }
 
     @Override
