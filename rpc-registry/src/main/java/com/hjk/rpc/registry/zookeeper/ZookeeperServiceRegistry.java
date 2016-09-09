@@ -33,7 +33,7 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
         try {
             serviceObject.validate();
             //创建registry顶级节点
-            String registryPath = "rpc_registry";
+            String registryPath = "/rpc_registry";
             keeperCreateNode(registryPath,null,CreateMode.PERSISTENT);
             //创建APPServer节点
             String appServerPath = registryPath + "/" + serviceObject.getAppServer();

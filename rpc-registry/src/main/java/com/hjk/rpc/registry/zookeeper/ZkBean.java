@@ -6,7 +6,7 @@ package com.hjk.rpc.registry.zookeeper;
 public class ZkBean {
     private String zkAddress;
     private int sessionTimeoutInMillis;
-    private String zkRegistryPath  = "rpc_registry";
+    private String zkRegistryPath  = "/rpc_registry";
 
     public String getZkRegistryPath() {
         return zkRegistryPath;

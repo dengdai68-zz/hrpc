@@ -51,7 +51,6 @@ public class ServerBeanDefinitionParser extends AbstractBeanDefinitionParser {
 
     }
 
-    //是否会生成id,默认false,则bean标签必须要有id
     protected boolean shouldGenerateId() {
         return true;
     }

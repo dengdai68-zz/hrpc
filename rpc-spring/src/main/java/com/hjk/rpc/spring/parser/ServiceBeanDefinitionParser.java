@@ -20,10 +20,12 @@ public class ServiceBeanDefinitionParser extends AbstractBeanDefinitionParser {
     @Override
     protected AbstractBeanDefinition parseInternal(Element element, ParserContext parserContext) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(ServiceBean.class);
-        String id = element.getAttribute("id");
         String clazz = element.getAttribute("class");
-        builder.addPropertyValue("id", id);
         builder.addPropertyValue("clazz", clazz);
         return builder.getBeanDefinition();
+    }
+
+    protected boolean shouldGenerateId() {
+        return true;
     }
 }

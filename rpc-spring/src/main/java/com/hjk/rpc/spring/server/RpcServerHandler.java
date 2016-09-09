@@ -24,6 +24,7 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
         RpcRequest request = JSON.toJavaObject((JSON) JSON.toJSON(msg),RpcRequest.class);
 
 
+
         ctx.write(msg);//写回数据，
     }
     public void channelReadComplete(ChannelHandlerContext ctx) {

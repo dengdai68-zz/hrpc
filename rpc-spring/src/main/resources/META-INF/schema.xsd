@@ -8,7 +8,7 @@
     <xsd:element name="zookeeper">
         <xsd:complexType>
             <xsd:attribute name="zkAddress" type="xsd:string" use="required"/>
-            <xsd:attribute name="sessionTimeoutInMillis" type="xsd:int" use="optional"/>
+            <xsd:attribute name="sessionTimeoutInMillis" type="xsd:string" use="optional"/>
         </xsd:complexType>
     </xsd:element>
 
@@ -18,7 +18,7 @@
                 <xsd:element ref="service"/>
             </xsd:choice>
             <xsd:attribute name="server" type="xsd:string" use="required"/>
-            <xsd:attribute name="port" type="xsd:int" use="required"/>
+            <xsd:attribute name="port" type="xsd:string" use="required"/>
         </xsd:complexType>
     </xsd:element>
 
@@ -41,7 +41,6 @@
 
     <xsd:element name="service">
         <xsd:complexType>
-            <xsd:attribute name="id" type="xsd:string" use="required"/>
             <xsd:attribute name="class" type="xsd:string" use="required"/>
         </xsd:complexType>
     </xsd:element>

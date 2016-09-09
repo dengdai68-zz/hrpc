@@ -23,10 +23,20 @@ public class InterfaceBeanDefinitionParser extends AbstractBeanDefinitionParser 
         String id = element.getAttribute("id");
         String clazz = element.getAttribute("class");
         String timeoutInMillis = element.getAttribute("timeoutInMillis");
+
         builder.addPropertyValue("id", id);
         builder.addPropertyValue("clazz", clazz);
         builder.addPropertyValue("timeoutInMillis", timeoutInMillis);
 
+
+        if (parserContext.getRegistry().containsBeanDefinition(id))  {
+            throw new IllegalStateException("Duplicate spring bean id " + id);
+        }
+        if (id != null && id.length() > 0) {
+            String server = element.getAttribute("server");
+            builder.addPropertyValue("server",server);
+            parserContext.getRegistry().registerBeanDefinition(id, builder.getBeanDefinition());
+        }
         return builder.getBeanDefinition();
     }
 

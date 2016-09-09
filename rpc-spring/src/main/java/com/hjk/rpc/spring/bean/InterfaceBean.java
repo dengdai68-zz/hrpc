@@ -1,11 +1,19 @@
 package com.hjk.rpc.spring.bean;
 
+import org.springframework.beans.factory.FactoryBean;
+
+import com.hjk.rpc.common.bean.ServiceObject;
+import com.hjk.rpc.spring.client.RpcCglibProxy;
+
 /**
  * Created by hanjk on 16/9/8.
  */
-public class InterfaceBean {
+public class InterfaceBean implements FactoryBean<Object>{
     private String id;
     private String clazz;
+
+    private String server;
+
     private int timeoutInMillis;
 
     public String getId() {
@@ -39,5 +47,31 @@ public class InterfaceBean {
                 ", clazz='" + clazz + '\'' +
                 ", timeoutInMillis=" + timeoutInMillis +
                 '}';
+    }
+
+    @Override
+    public Object getObject() throws Exception {
+        ServiceObject service = new ServiceObject();
+        service.setServiceName(clazz);
+        service.setAppServer(server);
+        return RpcCglibProxy.getPoxyObject(service);
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        try {
+            return Class.forName(clazz);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean isSingleton() {
+        return false;
+    }
+
+    public void setServer(String server) {
+        this.server = server;
     }
 }

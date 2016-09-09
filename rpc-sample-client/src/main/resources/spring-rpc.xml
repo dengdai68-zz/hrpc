@@ -12,12 +12,12 @@
 
     <rpc:zookeeper zkAddress="${zkAddress}" sessionTimeoutInMillis="${zkSessionTimeout}"/>
 
-    <rpc:server server="testServer" port="1234">
-        <rpc:service class="com.hjk.rpc.sample.api.Transport"/>
-    </rpc:server>
+    <!--<rpc:server server="testServer" port="1234">-->
+        <!--<rpc:service class="com.hjk.rpc.sample.api.Transportsport"/>-->
+    <!--</rpc:server>-->
 
-    <!--<rpc:client server="testServer">-->
-        <!--<rpc:interface id="user" class="com.hjk.rpc.sample.api.Transport"/>-->
-    <!--</rpc:client>-->
+    <rpc:client server="testServer">
+        <rpc:interface id="user" class="com.hjk.rpc.sample.api.Transport"/>
+    </rpc:client>
 
 </beans>

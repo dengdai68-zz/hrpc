@@ -87,12 +87,22 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
         return services.get(ThreadLocalRandom.current().nextInt(services.size()));
     }
 
+
+    private static volatile ServiceDiscovery INSTANCE;
+
     private static class SingletonHolder {
         private static final ServiceDiscovery INSTANCE = new ZookeeperServiceDiscovery(null);
     }
 
-    public static final ServiceDiscovery getInstance() {
-        return SingletonHolder.INSTANCE;
+    public static final ServiceDiscovery getInstance(ZkBean zkBean) {
+        if(INSTANCE == null){
+            synchronized(ZookeeperServiceDiscovery.class){
+                if(INSTANCE == null){
+                    INSTANCE = new ZookeeperServiceDiscovery(zkBean);
+                }
+            }
+        }
+        return INSTANCE;
     }
 
 }

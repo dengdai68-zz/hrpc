@@ -5,16 +5,7 @@ package com.hjk.rpc.spring.bean;
  */
 public class ServiceBean {
 
-    private String id;
     private String clazz;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getClazz() {
         return clazz;
@@ -27,8 +18,7 @@ public class ServiceBean {
     @Override
     public String toString() {
         return "ServiceBean{" +
-                "id='" + id + '\'' +
-                ", clazz='" + clazz + '\'' +
+                "clazz='" + clazz + '\'' +
                 '}';
     }
 }
