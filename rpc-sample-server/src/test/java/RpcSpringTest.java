@@ -3,25 +3,7 @@
  */
 
 import com.hjk.rpc.common.Constant;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.hjk.rpc.common.bean.RpcRequest;
-import com.hjk.rpc.common.bean.RpcResponse;
-import com.hjk.rpc.common.bean.ServiceObject;
-import com.hjk.rpc.common.codec.RpcDecoder;
-import com.hjk.rpc.common.codec.RpcEncoder;
-import com.hjk.rpc.core.registry.ServiceRegistry;
-import com.hjk.rpc.registry.zookeeper.ZookeeperServiceRegistry;
-import com.hjk.rpc.spring.ContainerInitializer;
-import com.hjk.rpc.spring.bean.ServiceBean;
-import com.hjk.rpc.spring.server.RpcServerHandler;
-
+import com.hjk.rpc.core.server.RpcServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -31,8 +13,16 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 
 public class RpcSpringTest {
 
@@ -66,7 +56,7 @@ public class RpcSpringTest {
                     ChannelPipeline pipeline = channel.pipeline();
                     pipeline.addLast(new StringDecoder(Charset.forName(Constant.MESSAGE_CHARSET)));
                     pipeline.addLast(new StringEncoder(Charset.forName(Constant.MESSAGE_CHARSET)));
-                    pipeline.addLast(new RpcServerHandler());
+                    pipeline.addLast(new RpcServerHandler(new HashMap<String, Object>()));
                 }
             });
             bootstrap.option(ChannelOption.SO_BACKLOG, 1024);

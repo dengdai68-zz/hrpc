@@ -1,4 +1,4 @@
-package com.hjk.rpc.core.exception;
+package com.hjk.rpc.common.exception;
 
 /**
  * rpc通用异常

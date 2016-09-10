@@ -1,19 +1,18 @@
-package com.hjk.rpc.spring.client;
+package com.hjk.rpc.core.client;
 
 import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
 import com.hjk.rpc.common.bean.ServiceObject;
+import com.hjk.rpc.common.exception.NotFoundServiceException;
 import com.hjk.rpc.common.utils.StringUtil;
 import com.hjk.rpc.common.utils.UUIDUtil;
-import com.hjk.rpc.core.discovery.ServiceDiscovery;
-import com.hjk.rpc.core.exception.NotFoundServiceException;
+import com.hjk.rpc.registry.discovery.ServiceDiscovery;
 import com.hjk.rpc.registry.zookeeper.ZookeeperServiceDiscovery;
-import com.hjk.rpc.spring.RpcApplicationContext;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodInterceptor;
-import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
@@ -42,7 +41,7 @@ public class RpcCglibProxy{
                     request.setParameterTypesClass(method.getParameterTypes());
                     request.setParameters(objects);
                     //发送请求
-                    ServiceDiscovery serviceDiscovery = ZookeeperServiceDiscovery.getInstance(RpcApplicationContext.zkconf);
+                    ServiceDiscovery serviceDiscovery = ZookeeperServiceDiscovery.getInstance();
                     String serverAddress ;
                     try {
                         serverAddress = serviceDiscovery.discovery(serviceObject.getAppServer(),serviceObject.getServiceName());

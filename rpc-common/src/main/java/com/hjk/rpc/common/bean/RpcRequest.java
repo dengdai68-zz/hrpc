@@ -2,7 +2,6 @@ package com.hjk.rpc.common.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-import java.beans.Transient;
 import java.util.Arrays;
 
 /**

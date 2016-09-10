@@ -1,4 +1,4 @@
-package com.hjk.rpc.core.exception;
+package com.hjk.rpc.common.exception;
 
 /**
  * Created by dengd on 2016/9/9.

@@ -27,11 +27,6 @@
             <version>1.7.7</version>
         </dependency>
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.0.26.Final</version>
-        </dependency>
-        <dependency>
             <groupId>hrpc</groupId>
             <artifactId>rpc-common</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -54,11 +49,6 @@
         <dependency>
             <groupId>hrpc</groupId>
             <artifactId>rpc-registry</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>hrpc</groupId>
-            <artifactId>rpc-sample-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

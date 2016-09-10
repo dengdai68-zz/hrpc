@@ -3,22 +3,11 @@ package com.hjk.rpc.client; /**
  */
 
 import com.hjk.rpc.common.Constant;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.hjk.rpc.common.bean.RpcRequest;
-import com.hjk.rpc.common.bean.RpcResponse;
-import com.hjk.rpc.common.codec.RpcDecoder;
-import com.hjk.rpc.common.codec.RpcEncoder;
+import com.hjk.rpc.core.client.RpcClientHandler;
 import com.hjk.rpc.sample.api.Transport;
 import com.hjk.rpc.spring.bean.ClientBean;
 import com.hjk.rpc.spring.bean.ServerBean;
 import com.hjk.rpc.spring.bean.ZookeeperBean;
-import com.hjk.rpc.spring.client.RpcClientHandler;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -29,6 +18,11 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.nio.charset.Charset;
 

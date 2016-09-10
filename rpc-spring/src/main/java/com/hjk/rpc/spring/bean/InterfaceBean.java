@@ -1,10 +1,9 @@
 package com.hjk.rpc.spring.bean;
 
-import com.hjk.rpc.common.utils.StringUtil;
-import org.springframework.beans.factory.FactoryBean;
-
 import com.hjk.rpc.common.bean.ServiceObject;
-import com.hjk.rpc.spring.client.RpcCglibProxy;
+import com.hjk.rpc.common.utils.StringUtil;
+import com.hjk.rpc.core.client.RpcCglibProxy;
+import org.springframework.beans.factory.FactoryBean;
 
 /**
  * Created by hanjk on 16/9/8.

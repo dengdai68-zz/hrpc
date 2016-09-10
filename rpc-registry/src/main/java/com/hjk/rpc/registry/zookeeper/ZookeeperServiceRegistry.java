@@ -1,7 +1,7 @@
 package com.hjk.rpc.registry.zookeeper;
 
-import java.io.IOException;
-
+import com.hjk.rpc.common.bean.ServiceObject;
+import com.hjk.rpc.registry.registry.ServiceRegistry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
@@ -11,13 +11,12 @@ import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hjk.rpc.common.bean.ServiceObject;
-import com.hjk.rpc.core.registry.ServiceRegistry;
+import java.io.IOException;
 
 /**
  * Created by hanjk on 16/9/7.
  */
-public class ZookeeperServiceRegistry implements ServiceRegistry{
+public class ZookeeperServiceRegistry implements ServiceRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceRegistry.class);
 

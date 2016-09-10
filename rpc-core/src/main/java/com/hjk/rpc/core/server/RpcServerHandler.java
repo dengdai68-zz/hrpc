@@ -1,16 +1,19 @@
-package com.hjk.rpc.spring.server;
+package com.hjk.rpc.core.server;
 
 import com.alibaba.fastjson.JSON;
 import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
-import com.hjk.rpc.spring.RpcApplicationContext;
+
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import net.sf.cglib.reflect.FastClass;
+import net.sf.cglib.reflect.FastMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.reflect.FastClass;
-import org.springframework.cglib.reflect.FastMethod;
+
+import javax.management.ServiceNotFoundException;
+import java.util.Map;
 
 /**
  * Created by hanjk on 16/9/8.
@@ -18,6 +21,12 @@ import org.springframework.cglib.reflect.FastMethod;
 public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(RpcServerHandler.class);
+
+    Map<String, Object> rpcServiceMap;
+
+    public RpcServerHandler(Map<String, Object> rpcServiceMap) {
+        this.rpcServiceMap = rpcServiceMap;
+    }
 
 
     public void channelRead(ChannelHandlerContext ctx,
@@ -36,7 +45,10 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
         }
         response.setRequestId(request.getRequestId());
         try {
-            Object serviceBean = RpcApplicationContext.getRpcBean(request.getServiceName());
+            Object serviceBean = rpcServiceMap.get(request.getServiceName());
+            if(serviceBean == null){
+                throw new ServiceNotFoundException("service:"+request.getServiceName()+" not found!");
+            }
             Class<?> serviceClass = serviceBean.getClass();
             String methodName = request.getMethodName();
             Class<?>[] parameterTypes = request.getParameterTypesClass();
@@ -50,6 +62,7 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
         } catch (Throwable e) {
             logger.error("server invoke is error!",e);
             response.setResultCode(RpcResponse.FAIL);
+            response.setErrorMsg(e.getMessage());
         }
         String responseStr = JSON.toJSONString(response);
         logger.debug("server return data:{}",responseStr);

@@ -12,6 +12,10 @@ public class RpcResponse {
     private String requestId;
     private Object result;
     private String resultCode;
+    private String errorMsg;
+
+    public RpcResponse() {
+    }
 
     public String getRequestId() {
         return requestId;
@@ -44,5 +48,20 @@ public class RpcResponse {
                 ", result=" + result +
                 ", resultCode='" + resultCode + '\'' +
                 '}';
+    }
+
+    public RpcResponse(String requestId, Object result, String resultCode, String errorMsg) {
+        this.requestId = requestId;
+        this.result = result;
+        this.resultCode = resultCode;
+        this.errorMsg = errorMsg;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 }

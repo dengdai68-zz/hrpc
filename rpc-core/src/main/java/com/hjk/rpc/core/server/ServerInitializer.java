@@ -1,23 +1,8 @@
-package com.hjk.rpc.spring.server;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
+package com.hjk.rpc.core.server;
 
 import com.hjk.rpc.common.Constant;
-import com.hjk.rpc.registry.zookeeper.ZookeeperConf;
-import com.hjk.rpc.spring.RpcApplicationContext;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hjk.rpc.common.bean.ServiceObject;
-import com.hjk.rpc.core.registry.ServiceRegistry;
-import com.hjk.rpc.registry.zookeeper.ZookeeperServiceRegistry;
-import com.hjk.rpc.spring.bean.ServerBean;
-import com.hjk.rpc.spring.bean.ServiceBean;
-
+import com.hjk.rpc.common.conf.ServerConf;
+import com.hjk.rpc.registry.zookeeper.ZookeeperServiceInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -27,6 +12,14 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
 
 /**
  * netty服务启动，注册zookeeper
@@ -36,13 +29,15 @@ public class ServerInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerInitializer.class);
 
-    public static void init(ServerBean server) throws Exception {
+    private ServerConf server;
+
+    public ServerInitializer(ServerConf server) {
+        this.server = server;
+    }
+
+    public void init(List<String> services, final Map<String, Object> rpcServiceMap) throws Exception {
         //开始注册服务
         logger.info("begin ServerInitializer!");
-        if (RpcApplicationContext.zkconf == null) {
-            throw new RuntimeException("注册中心未找到!");
-        }
-        ZookeeperConf zkBean = RpcApplicationContext.zkconf;
         if (server == null)
             return;
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -57,7 +52,7 @@ public class ServerInitializer {
                     ChannelPipeline pipeline = channel.pipeline();
                     pipeline.addLast(new StringDecoder(Charset.forName(Constant.MESSAGE_CHARSET)));
                     pipeline.addLast(new StringEncoder(Charset.forName(Constant.MESSAGE_CHARSET)));
-                    pipeline.addLast(new RpcServerHandler());
+                    pipeline.addLast(new RpcServerHandler(rpcServiceMap));
                 }
             });
             bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
@@ -65,18 +60,7 @@ public class ServerInitializer {
             // 启动 netty 服务器
             ChannelFuture future = bootstrap.bind(server.getPort()).sync();
             logger.info("netty started on port {}", server.getPort());
-            ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry(zkBean);
-            String localIp = getIp();
-            //注册服务
-            for (ServiceBean service : server.getServices()) {
-                ServiceObject serviceObject = new ServiceObject();
-                serviceObject.setAppServer(server.getServer());
-                serviceObject.setServiceName(service.getClazz());
-                serviceObject.setServiceAddress(localIp+":"+server.getPort());
-                serviceRegistry.register(serviceObject);
-                logger.info("register service:{} , {}", serviceObject.getServiceName(), serviceObject.getServiceAddress());
-            }
-            logger.info("service register is successful!");
+            new ZookeeperServiceInitializer().init(services,server);
             logger.info("server to start successfully!!!");
             future.channel().closeFuture().sync();
         } catch (Exception e) {
@@ -86,16 +70,5 @@ public class ServerInitializer {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }
-    }
-    private static String getIp() throws Exception {
-        String ip = "";
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            ip = addr.getHostAddress();
-        } catch (UnknownHostException e) {
-            throw e;
-        }
-        ip = "127.0.0.1";
-        return ip;
     }
 }

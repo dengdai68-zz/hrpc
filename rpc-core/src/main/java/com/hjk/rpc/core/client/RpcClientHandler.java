@@ -1,8 +1,8 @@
-package com.hjk.rpc.spring.client;
+package com.hjk.rpc.core.client;
 
 import com.alibaba.fastjson.JSON;
 import com.hjk.rpc.common.bean.RpcResponse;
-import com.hjk.rpc.core.exception.MessageFormatException;
+import com.hjk.rpc.common.exception.MessageFormatException;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;

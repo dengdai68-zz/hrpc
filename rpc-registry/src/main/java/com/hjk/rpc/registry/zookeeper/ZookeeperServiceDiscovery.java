@@ -1,8 +1,8 @@
 package com.hjk.rpc.registry.zookeeper;
 
-import com.hjk.rpc.core.discovery.ServiceDiscovery;
-import com.hjk.rpc.core.exception.NotFoundServiceException;
-import com.hjk.rpc.core.exception.NotFoundZookeeperPathException;
+import com.hjk.rpc.common.exception.NotFoundServiceException;
+import com.hjk.rpc.common.exception.NotFoundZookeeperPathException;
+import com.hjk.rpc.registry.discovery.ServiceDiscovery;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by hanjk on 16/9/7.
  */
-public class ZookeeperServiceDiscovery implements ServiceDiscovery{
+public class ZookeeperServiceDiscovery implements ServiceDiscovery {
 
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceDiscovery.class);
 
@@ -94,11 +94,11 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
         private static final ServiceDiscovery INSTANCE = new ZookeeperServiceDiscovery(null);
     }
 
-    public static final ServiceDiscovery getInstance(ZookeeperConf zkBean) {
+    public static final ServiceDiscovery getInstance() {
         if(INSTANCE == null){
             synchronized(ZookeeperServiceDiscovery.class){
                 if(INSTANCE == null){
-                    INSTANCE = new ZookeeperServiceDiscovery(zkBean);
+                    INSTANCE = new ZookeeperServiceDiscovery(ZookeeperConf.zkconf);
                 }
             }
         }

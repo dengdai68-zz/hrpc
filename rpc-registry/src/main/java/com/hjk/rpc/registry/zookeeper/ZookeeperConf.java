@@ -4,6 +4,8 @@ package com.hjk.rpc.registry.zookeeper;
  * Created by dengd on 2016/9/9.
  */
 public class ZookeeperConf {
+
+    public static ZookeeperConf zkconf = null;
     private String zkAddress;
     private int sessionTimeoutInMillis;
     private String zkRegistryPath  = "/rpc_registry";
@@ -35,5 +37,6 @@ public class ZookeeperConf {
     public ZookeeperConf(String zkAddress, int sessionTimeoutInMillis) {
         this.zkAddress = zkAddress;
         this.sessionTimeoutInMillis = sessionTimeoutInMillis;
+        ZookeeperConf.zkconf = this;
     }
 }

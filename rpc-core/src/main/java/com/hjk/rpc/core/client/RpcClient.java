@@ -1,4 +1,4 @@
-package com.hjk.rpc.spring.client;
+package com.hjk.rpc.core.client;
 
 import com.alibaba.fastjson.JSON;
 import com.hjk.rpc.common.Constant;

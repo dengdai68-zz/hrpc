@@ -1,4 +1,4 @@
-package com.hjk.rpc.core.discovery;
+package com.hjk.rpc.registry.discovery;
 
 /**
  * 发现服务

@@ -1,8 +1,6 @@
 package com.hjk.rpc.spring.parser;
 
-import java.util.Iterator;
-import java.util.List;
-
+import com.hjk.rpc.spring.bean.ServerBean;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedList;
@@ -11,7 +9,8 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 
-import com.hjk.rpc.spring.bean.ServerBean;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by hanjk on 16/9/8.

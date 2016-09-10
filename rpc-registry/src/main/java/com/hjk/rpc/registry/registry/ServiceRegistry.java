@@ -1,4 +1,4 @@
-package com.hjk.rpc.core.registry;
+package com.hjk.rpc.registry.registry;
 
 import com.hjk.rpc.common.bean.ServiceObject;
 
