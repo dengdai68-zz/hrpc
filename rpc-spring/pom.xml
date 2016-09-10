@@ -56,12 +56,6 @@
             <artifactId>rpc-registry</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!-- CGLib -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.1_3</version>
-        </dependency>
         <dependency>
             <groupId>hrpc</groupId>
             <artifactId>rpc-sample-api</artifactId>

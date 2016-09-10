@@ -38,14 +38,13 @@ public class ClientBeanDefinitionParser extends AbstractBeanDefinitionParser {
     }
 
     private void parseChildren(List<Element> childElements, BeanDefinitionBuilder builder, ParserContext parserContext, String server) {
-        ManagedList children = new ManagedList(childElements.size());
         InterfaceBeanDefinitionParser parser = new InterfaceBeanDefinitionParser();
         Iterator var5 = childElements.iterator();
 
         while(var5.hasNext()) {
             Element element = (Element)var5.next();
             element.setAttribute("server",server);
-            children.add(parser.parse(element, parserContext));
+            parser.parse(element, parserContext);
         }
     }
 

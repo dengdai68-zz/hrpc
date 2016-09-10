@@ -10,6 +10,8 @@
 
     <context:property-placeholder location="classpath:rpc.properties"/>
 
+    <context:component-scan base-package="com.hjk.rpc.sample.client"/>
+
     <rpc:zookeeper zkAddress="${zkAddress}" sessionTimeoutInMillis="${zkSessionTimeout}"/>
 
     <!--<rpc:server server="testServer" port="1234">-->

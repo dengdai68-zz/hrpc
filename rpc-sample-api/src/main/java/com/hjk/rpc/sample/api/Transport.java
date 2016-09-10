@@ -5,4 +5,5 @@ package com.hjk.rpc.sample.api;
  */
 public interface Transport {
     public String getName();
+    public void start(String driver);
 }

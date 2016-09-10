@@ -2,6 +2,9 @@ package com.hjk.rpc.client; /**
  * Created by hanjk on 16/9/8.
  */
 
+import com.hjk.rpc.common.Constant;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -27,6 +30,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.nio.charset.Charset;
+
 public class RpcSpringTest {
     @Test
     public void registrySpring(){
@@ -38,7 +43,7 @@ public class RpcSpringTest {
         System.out.println("============serverBean" + serverBean);
         System.out.println("============zookeeperBean" + zookeeperBean);
         Transport transport = (Transport) ctx.getBean("user");
-        System.out.println("============user" + transport.getName());
+        System.out.println("============" + transport.getName());
 
     }
 
@@ -54,8 +59,8 @@ public class RpcSpringTest {
                 @Override
                 public void initChannel(SocketChannel channel) throws Exception {
                     ChannelPipeline pipeline = channel.pipeline();
-                    pipeline.addLast(new RpcEncoder(RpcRequest.class)); // 编码 请求
-                    pipeline.addLast(new RpcDecoder(RpcResponse.class)); // 解码 RPC 响应
+                    pipeline.addLast(new StringDecoder(Charset.forName(Constant.MESSAGE_CHARSET)));
+                    pipeline.addLast(new StringEncoder(Charset.forName(Constant.MESSAGE_CHARSET)));
                     pipeline.addLast(new RpcClientHandler()); // 处理 RPC 响应
                 }
             });

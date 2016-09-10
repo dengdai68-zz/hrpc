@@ -1,6 +1,7 @@
 package com.hjk.rpc.common.bean;
 
 /**
+ * 响应
  * Created by hanjk on 16/9/8.
  */
 public class RpcResponse {
@@ -34,5 +35,14 @@ public class RpcResponse {
 
     public void setResultCode(String resultCode) {
         this.resultCode = resultCode;
+    }
+
+    @Override
+    public String toString() {
+        return "RpcResponse{" +
+                "requestId='" + requestId + '\'' +
+                ", result=" + result +
+                ", resultCode='" + resultCode + '\'' +
+                '}';
     }
 }

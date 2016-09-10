@@ -16,6 +16,8 @@
         <rpc:service class="com.hjk.rpc.sample.api.Transport"/>
     </rpc:server>
 
+    <bean class="com.hjk.rpc.sample.server.impl.Car"/>
+
     <!--<rpc:client server="testServer">-->
         <!--<rpc:interface id="user" class="com.hjk.rpc.sample.api.Transport"/>-->
     <!--</rpc:client>-->

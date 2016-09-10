@@ -11,5 +11,5 @@ public interface ServiceRegistry {
     /**
      * 注册服务
      */
-    void registry(ServiceObject serviceObject);
+    void register(ServiceObject serviceObject);
 }

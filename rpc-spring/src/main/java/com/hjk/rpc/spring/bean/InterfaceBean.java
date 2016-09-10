@@ -1,5 +1,6 @@
 package com.hjk.rpc.spring.bean;
 
+import com.hjk.rpc.common.utils.StringUtil;
 import org.springframework.beans.factory.FactoryBean;
 
 import com.hjk.rpc.common.bean.ServiceObject;
@@ -9,6 +10,7 @@ import com.hjk.rpc.spring.client.RpcCglibProxy;
  * Created by hanjk on 16/9/8.
  */
 public class InterfaceBean implements FactoryBean<Object>{
+
     private String id;
     private String clazz;
 
@@ -60,10 +62,12 @@ public class InterfaceBean implements FactoryBean<Object>{
     @Override
     public Class<?> getObjectType() {
         try {
-            return Class.forName(clazz);
+            if(StringUtil.isNotEmpty(clazz)){
+                return Class.forName(clazz);
+            }
         } catch (ClassNotFoundException e) {
-            return Object.class;
         }
+        return null;
     }
 
     @Override

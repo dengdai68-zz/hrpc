@@ -2,6 +2,9 @@
  * Created by hanjk on 16/9/8.
  */
 
+import com.hjk.rpc.common.Constant;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +31,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+import java.nio.charset.Charset;
 
 public class RpcSpringTest {
 
@@ -59,8 +64,8 @@ public class RpcSpringTest {
                 @Override
                 public void initChannel(SocketChannel channel) throws Exception {
                     ChannelPipeline pipeline = channel.pipeline();
-                    pipeline.addLast(new RpcDecoder(RpcRequest.class)); // 解码  请求
-                    pipeline.addLast(new RpcEncoder(RpcResponse.class)); // 编码  响应
+                    pipeline.addLast(new StringDecoder(Charset.forName(Constant.MESSAGE_CHARSET)));
+                    pipeline.addLast(new StringEncoder(Charset.forName(Constant.MESSAGE_CHARSET)));
                     pipeline.addLast(new RpcServerHandler());
                 }
             });

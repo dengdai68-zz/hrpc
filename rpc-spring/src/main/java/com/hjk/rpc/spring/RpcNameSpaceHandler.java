@@ -28,6 +28,7 @@ public class RpcNameSpaceHandler extends NamespaceHandlerSupport {
     }
 
     public BeanDefinition parse(Element element, ParserContext parserContext) {
+        parserContext.getRegistry().registerBeanDefinition(RpcApplicationContext.class.getName(), BeanDefinitionBuilder.rootBeanDefinition(RpcApplicationContext.class).getBeanDefinition());
         parserContext.getRegistry().registerBeanDefinition(ContainerInitializer.class.getName(), BeanDefinitionBuilder.rootBeanDefinition(ContainerInitializer.class).getBeanDefinition());
         return super.parse(element, parserContext);
     }

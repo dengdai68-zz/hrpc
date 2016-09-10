@@ -10,4 +10,9 @@ public class Car implements Transport {
     public String getName() {
         return "car";
     }
+
+    @Override
+    public void start(String driver) {
+        System.out.println("driver = [" + driver + "] begin start this car!");
+    }
 }

@@ -26,7 +26,7 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
     public ZookeeperServiceRegistry(){
     }
 
-    public ZookeeperServiceRegistry(ZkBean zkbean) throws IOException {
+    public ZookeeperServiceRegistry(ZookeeperConf zkbean) throws IOException {
         zk = new ZooKeeper(zkbean.getZkAddress(), zkbean.getSessionTimeoutInMillis(), new Watcher() {
 
             @Override
@@ -37,7 +37,7 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
     }
 
     @Override
-    public void registry(ServiceObject serviceObject){
+    public void register(ServiceObject serviceObject){
         try {
             serviceObject.validate();
             //创建registry顶级节点

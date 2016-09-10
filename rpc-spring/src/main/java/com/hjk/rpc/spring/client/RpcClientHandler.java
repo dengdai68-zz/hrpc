@@ -2,33 +2,33 @@ package com.hjk.rpc.spring.client;
 
 import com.alibaba.fastjson.JSON;
 import com.hjk.rpc.common.bean.RpcResponse;
-import io.netty.channel.SimpleChannelInboundHandler;
+import com.hjk.rpc.core.exception.MessageFormatException;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-
 /**
- * RPC 客户端（用于发送 RPC 请求）
- *
- * @author huangyong
- * @since 1.0.0
+ * 处理服务端返回信息handler
  */
-public class RpcClientHandler extends SimpleChannelInboundHandler {
-
+public class RpcClientHandler extends ChannelInboundHandlerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(RpcClientHandler.class);
 
     protected RpcResponse response;
 
-
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext,
+    public void channelRead(ChannelHandlerContext ctx,
                                 Object o) throws Exception {
-        logger.debug("client received data:{}",o);
+        logger.debug("client received return data:{}",o);
+        try {
+            response = JSON.parseObject(String.valueOf(o),RpcResponse.class);
+        }catch (Exception e){
+            throw new MessageFormatException("format request object is fail!");
+        }
+    }
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        logger.error("RpcClientHandler caught exception", cause);
+        ctx.close();
     }
 
 }

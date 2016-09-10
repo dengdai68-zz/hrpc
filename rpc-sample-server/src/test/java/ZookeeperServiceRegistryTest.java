@@ -22,7 +22,7 @@ public class ZookeeperServiceRegistryTest {
         serviceObject.setServiceName("testService");
         serviceObject.setServiceAddress("testServiceAddress");
         serviceObject.setAppServer("testAppServer");
-        registry.registry(serviceObject);
+        registry.register(serviceObject);
         Thread.sleep(400*1000);
     }
     @Test

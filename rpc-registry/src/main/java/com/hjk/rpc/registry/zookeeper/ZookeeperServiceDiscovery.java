@@ -23,9 +23,9 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
 
     private ConcurrentHashMap<String,Vector<String>> serviceCacheMap = new ConcurrentHashMap();
 
-    private ZkBean zkBean;
+    private ZookeeperConf zkBean;
 
-    public ZookeeperServiceDiscovery(ZkBean zkBean) {
+    public ZookeeperServiceDiscovery(ZookeeperConf zkBean) {
         this.zkBean = zkBean;
     }
 
@@ -94,7 +94,7 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery{
         private static final ServiceDiscovery INSTANCE = new ZookeeperServiceDiscovery(null);
     }
 
-    public static final ServiceDiscovery getInstance(ZkBean zkBean) {
+    public static final ServiceDiscovery getInstance(ZookeeperConf zkBean) {
         if(INSTANCE == null){
             synchronized(ZookeeperServiceDiscovery.class){
                 if(INSTANCE == null){
