@@ -2,29 +2,13 @@ package com.hjk.rpc.client; /**
  * Created by hanjk on 16/9/8.
  */
 
-import com.hjk.rpc.common.Constant;
-import com.hjk.rpc.core.client.RpcClientHandler;
 import com.hjk.rpc.sample.api.Transport;
 import com.hjk.rpc.spring.bean.ClientBean;
 import com.hjk.rpc.spring.bean.ServerBean;
 import com.hjk.rpc.spring.bean.ZookeeperBean;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.nio.charset.Charset;
 
 public class RpcSpringTest {
     @Test
@@ -39,37 +23,5 @@ public class RpcSpringTest {
         Transport transport = (Transport) ctx.getBean("user");
         System.out.println("============" + transport.getName());
 
-    }
-
-    @Test
-    public void nettySend(){
-        EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            // 创建并初始化 Netty 客户端 Bootstrap 对象
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(group);
-            bootstrap.channel(NioSocketChannel.class);
-            bootstrap.handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel channel) throws Exception {
-                    ChannelPipeline pipeline = channel.pipeline();
-                    pipeline.addLast(new StringDecoder(Charset.forName(Constant.MESSAGE_CHARSET)));
-                    pipeline.addLast(new StringEncoder(Charset.forName(Constant.MESSAGE_CHARSET)));
-                    pipeline.addLast(new RpcClientHandler()); // 处理 RPC 响应
-                }
-            });
-            bootstrap.option(ChannelOption.TCP_NODELAY, true);
-            // 连接 RPC 服务器
-            ChannelFuture future = bootstrap.connect("127.0.0.1", 12124).sync();
-            // 写入 RPC 请求数据并关闭连接
-            Channel channel = future.channel();
-            channel.writeAndFlush("nihao").sync();
-            channel.closeFuture().sync();
-            // 返回 RPC 响应对象
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            group.shutdownGracefully();
-        }
     }
 }

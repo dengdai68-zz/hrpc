@@ -26,7 +26,10 @@ public class Client {
         String[] beanNames = ctx.getBeanNamesForType(Transport.class);
         String[] beanNamess = ctx.getBeanDefinitionNames();
         Transport transport = (Transport) ctx.getBean("user");
-        System.out.println("transport.getName:" + transport.getName());
+        int i = 100;
+        while (i-- > 0){
+            System.out.println("======transport.getName:" + transport.getName());
+        }
         transport.start("hanjiankai");
         Client client = ctx.getBean(Client.class);
 
