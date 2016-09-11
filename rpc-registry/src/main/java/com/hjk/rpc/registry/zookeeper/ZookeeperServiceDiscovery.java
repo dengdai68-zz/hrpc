@@ -32,7 +32,6 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
 
     public ZookeeperServiceDiscovery(ZookeeperConf zkconf) {
         this.zkconf = zkconf;
-        //TODO 增加 WatchedEvent
         zkClient = new ZkClient(zkconf.getAddress(), zkconf.getSessionTimeout(), zkconf.getConnectionTimeout());
     }
 
