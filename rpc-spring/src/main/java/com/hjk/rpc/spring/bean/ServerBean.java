@@ -7,17 +7,9 @@ import java.util.List;
  */
 public class ServerBean {
 
-    private String server;
+    private String name;
     private int port;
     private List<ServiceBean> services;
-
-    public String getServer() {
-        return server;
-    }
-
-    public void setServer(String server) {
-        this.server = server;
-    }
 
     public List<ServiceBean> getServices() {
         return services;
@@ -35,14 +27,20 @@ public class ServerBean {
         this.port = port;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "ServerBean{" +
-                "server='" + server + '\'' +
+                "name='" + name + '\'' +
                 ", port=" + port +
                 ", services=" + services +
                 '}';
     }
-
-
 }

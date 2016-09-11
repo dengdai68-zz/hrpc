@@ -14,7 +14,7 @@
                    sessionTimeout="${zookeeper.sessionTimeout}"
                    connectionTimeout="${zookeeper.connectionTimeout}"/>
 
-    <rpc:server server="testServer" port="1236">
+    <rpc:server name="testServer" port="1236">
         <rpc:service class="com.hjk.rpc.sample.api.Transport"/>
     </rpc:server>
 

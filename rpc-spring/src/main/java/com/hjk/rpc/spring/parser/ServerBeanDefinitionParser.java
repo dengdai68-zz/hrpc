@@ -29,8 +29,8 @@ public class ServerBeanDefinitionParser extends AbstractBeanDefinitionParser {
             this.parseChildren(childElements,builder, parserContext);
         }
 
-        String server = element.getAttribute("server");
-        builder.addPropertyValue("server", server);
+        String name = element.getAttribute("name");
+        builder.addPropertyValue("name", name);
         String port = element.getAttribute("port");
         builder.addPropertyValue("port",port);
         return builder.getBeanDefinition();

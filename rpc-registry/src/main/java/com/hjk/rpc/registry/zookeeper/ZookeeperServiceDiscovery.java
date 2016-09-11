@@ -6,12 +6,9 @@ import com.hjk.rpc.common.exception.NotFoundZookeeperPathException;
 import com.hjk.rpc.registry.discovery.ServiceDiscovery;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,13 +38,14 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
             String serviceKey = appServer + "/" + serviceName;
             //查找map是否缓存
             Vector<String> services = serviceCacheMap.get(serviceKey);
-            if(services != null && services.size() > 0){
+
+            if(services == null){
+                services = new Vector();
+            }else if(services.size() > 0){
                 logger.debug("get address{} from cache!",serviceKey);
                 return getRandomAddress(services);
             }
-            if(services == null){
-                services = new Vector<>();
-            }
+
             services.addAll(findServices(appServer,serviceName));
             serviceCacheMap.put(serviceKey,services);
             return getRandomAddress(services);
