@@ -30,21 +30,6 @@ public class InterfaceBeanDefinitionParser extends AbstractBeanDefinitionParser{
         builder.addPropertyValue("timeoutInMillis", timeoutInMillis);
         String server = element.getAttribute("server");
         builder.addPropertyValue("server",server);
-
-        /*if (id != null && id.length() > 0) {
-            if (parserContext.getRegistry().containsBeanDefinition(id))  {
-                throw new IllegalStateException("Duplicate spring bean id " + id);
-            }
-            BeanDefinition beanDefinition = builder.getBeanDefinition();
-//            beanDefinition.setParentName();setBeanClassName(clazz);
-            parserContext.getRegistry().registerBeanDefinition(id, beanDefinition);
-        }else {
-            try {
-                parserContext.getRegistry().registerBeanDefinition(Class.forName(clazz).getSimpleName(), builder.getBeanDefinition());
-            } catch (ClassNotFoundException e) {
-                logger.error("spring bean register error!",e);
-            }
-        }*/
         return builder.getBeanDefinition();
     }
 

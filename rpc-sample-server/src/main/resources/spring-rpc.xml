@@ -10,9 +10,11 @@
 
     <context:property-placeholder location="classpath:rpc.properties"/>
 
-    <rpc:zookeeper zkAddress="${zkAddress}" sessionTimeoutInMillis="${zkSessionTimeout}"/>
+    <rpc:zookeeper address="${zookeeper.address}"
+                   sessionTimeout="${zookeeper.sessionTimeout}"
+                   connectionTimeout="${zookeeper.connectionTimeout}"/>
 
-    <rpc:server server="testServer" port="1234">
+    <rpc:server server="testServer" port="1236">
         <rpc:service class="com.hjk.rpc.sample.api.Transport"/>
     </rpc:server>
 

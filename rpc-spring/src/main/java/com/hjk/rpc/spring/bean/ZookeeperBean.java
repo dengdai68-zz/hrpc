@@ -4,30 +4,40 @@ package com.hjk.rpc.spring.bean;
  * Created by hanjk on 16/9/8.
  */
 public class ZookeeperBean {
-    private String zkAddress;
-    private int sessionTimeoutInMillis;
+    private String address;
+    private int sessionTimeout;
+    private int connectionTimeout;
 
-    public String getZkAddress() {
-        return zkAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setZkAddress(String zkAddress) {
-        this.zkAddress = zkAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public int getSessionTimeoutInMillis() {
-        return sessionTimeoutInMillis;
+    public int getSessionTimeout() {
+        return sessionTimeout;
     }
 
-    public void setSessionTimeoutInMillis(int sessionTimeoutInMillis) {
-        this.sessionTimeoutInMillis = sessionTimeoutInMillis;
+    public void setSessionTimeout(int sessionTimeout) {
+        this.sessionTimeout = sessionTimeout;
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
     }
 
     @Override
     public String toString() {
         return "ZookeeperBean{" +
-                "zkAddress='" + zkAddress + '\'' +
-                ", sessionTimeoutInMillis=" + sessionTimeoutInMillis +
+                "address='" + address + '\'' +
+                ", sessionTimeout=" + sessionTimeout +
+                ", connectionTimeout=" + connectionTimeout +
                 '}';
     }
 }

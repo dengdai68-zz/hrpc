@@ -2,7 +2,7 @@ package com.hjk.rpc.spring;
 
 import com.hjk.rpc.common.conf.ServerConf;
 import com.hjk.rpc.core.server.ServerInitializer;
-import com.hjk.rpc.registry.zookeeper.ZookeeperConf;
+import com.hjk.rpc.common.conf.ZookeeperConf;
 import com.hjk.rpc.spring.bean.ServerBean;
 import com.hjk.rpc.spring.bean.ServiceBean;
 import com.hjk.rpc.spring.bean.ZookeeperBean;
@@ -56,7 +56,7 @@ public class RpcApplicationContext implements ApplicationContextAware,Initializi
         Map zookeeperMap = RpcApplicationContext.getApplicationContext().getBeansOfType(ZookeeperBean.class);
         if (zookeeperMap != null && !zookeeperMap.isEmpty()) {
             ZookeeperBean zookeeperBean = (ZookeeperBean) zookeeperMap.values().toArray()[0];
-            new ZookeeperConf(zookeeperBean.getZkAddress(),zookeeperBean.getSessionTimeoutInMillis());
+            new ZookeeperConf(zookeeperBean.getAddress(),zookeeperBean.getSessionTimeout(),zookeeperBean.getConnectionTimeout());
         }
         //获取服务列表,初始化服务
         Map serverMap = RpcApplicationContext.getApplicationContext().getBeansOfType(ServerBean.class);

@@ -1,8 +1,11 @@
 package com.hjk.rpc.registry.zookeeper;
 
+import com.hjk.rpc.common.conf.ZookeeperConf;
 import com.hjk.rpc.common.exception.NotFoundServiceException;
 import com.hjk.rpc.common.exception.NotFoundZookeeperPathException;
 import com.hjk.rpc.registry.discovery.ServiceDiscovery;
+import org.I0Itec.zkclient.IZkChildListener;
+import org.I0Itec.zkclient.ZkClient;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
@@ -23,10 +26,14 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
 
     private ConcurrentHashMap<String,Vector<String>> serviceCacheMap = new ConcurrentHashMap();
 
-    private ZookeeperConf zkBean;
+    private final ZkClient zkClient;
 
-    public ZookeeperServiceDiscovery(ZookeeperConf zkBean) {
-        this.zkBean = zkBean;
+    private final ZookeeperConf zkconf;
+
+    public ZookeeperServiceDiscovery(ZookeeperConf zkconf) {
+        this.zkconf = zkconf;
+        //TODO 增加 WatchedEvent
+        zkClient = new ZkClient(zkconf.getAddress(), zkconf.getSessionTimeout(), zkconf.getConnectionTimeout());
     }
 
     @Override
@@ -55,28 +62,28 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
         return null;
     }
 
-    private List<String> findServices(String appServer, String serviceName) throws IOException, KeeperException, InterruptedException {
-        ZooKeeper zk = new ZooKeeper(zkBean.getZkAddress(),zkBean.getSessionTimeoutInMillis(), new ServiceWatcher(serviceCacheMap),true);
-        //获取registry顶级节点
-        String registryPath = zkBean.getZkRegistryPath();
-        if (null == zk.exists(registryPath, false)) {
-            logger.error("not found registry top node:{}", registryPath);
-            throw new NotFoundZookeeperPathException("registry top node not found!");
+    private List<String> findServices(final String appServer, final String serviceName){
+        //获取service path
+        String servicePath = zkconf.getRegistryPath() + "/" + appServer + "/" + serviceName;
+        if(!zkClient.exists(servicePath)){
+            logger.warn("not found zookeeper registry service, servicePath:{}",servicePath);
+            throw new NotFoundServiceException("not found zookeeper registry service!");
         }
-        //获取系统节点
-        String appServerPath = registryPath + "/" + appServer;
-        if (null == zk.exists(appServerPath, false)) {
-            logger.error("not found appServer node:{}", appServerPath);
-            throw new NotFoundZookeeperPathException("registry top node not found!");
-        }
+
         //获取service子节点
-        String servicePath = appServerPath + "/" + serviceName;
-        List<String> addressList = zk.getChildren(servicePath, false);
+        List<String> addressList = zkClient.getChildren(servicePath);
         if (addressList == null || addressList.size() == 0) {
-            logger.warn("not found server:{}", servicePath);
-            throw new NotFoundServiceException("registry top node not found!");
+            logger.warn("not found server of this service:{}", serviceName);
+            throw new NotFoundServiceException("not found server of this service!");
         }
-        zk.close();
+        //订阅 服务节点变化
+        zkClient.subscribeChildChanges(servicePath,new IZkChildListener(){
+            @Override
+            public void handleChildChange(String s, List<String> list) throws Exception {
+                ;
+                serviceCacheMap.put(appServer + s.substring(s.lastIndexOf("/")),new Vector<String>(list));
+            }
+        });
         return addressList;
     }
 
@@ -98,11 +105,10 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
         if(INSTANCE == null){
             synchronized(ZookeeperServiceDiscovery.class){
                 if(INSTANCE == null){
-                    INSTANCE = new ZookeeperServiceDiscovery(ZookeeperConf.zkconf);
+                    INSTANCE = new ZookeeperServiceDiscovery(ZookeeperConf.getZkconf());
                 }
             }
         }
         return INSTANCE;
     }
-
 }

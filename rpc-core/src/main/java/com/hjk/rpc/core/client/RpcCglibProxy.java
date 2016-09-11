@@ -4,6 +4,7 @@ import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
 import com.hjk.rpc.common.bean.ServiceObject;
 import com.hjk.rpc.common.exception.NotFoundServiceException;
+import com.hjk.rpc.common.exception.RpcException;
 import com.hjk.rpc.common.utils.StringUtil;
 import com.hjk.rpc.common.utils.UUIDUtil;
 import com.hjk.rpc.registry.discovery.ServiceDiscovery;
@@ -60,6 +61,12 @@ public class RpcCglibProxy{
                     long endTime = System.currentTimeMillis();
                     logger.info("client received return requestId:{} data:{}",response.getRequestId(),response);
                     logger.info("client request cost time:{}",endTime - beginTime);
+                    if(response == null){
+                        throw new RpcException("远程调用异常！");
+                    }
+                    if(!RpcResponse.SUCCESS.equals(response.getResultCode())){
+                        throw new RpcException("远程调用异常！" + response.getErrorMsg());
+                    }
                     return response.getResult();
                 }
             }

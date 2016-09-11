@@ -28,7 +28,6 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
         this.rpcServiceMap = rpcServiceMap;
     }
 
-
     public void channelRead(ChannelHandlerContext ctx,
                                 Object o) throws Exception {
         logger.debug("server received data:{}",o);

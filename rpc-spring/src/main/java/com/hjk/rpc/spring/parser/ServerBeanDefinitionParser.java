@@ -36,16 +36,17 @@ public class ServerBeanDefinitionParser extends AbstractBeanDefinitionParser {
         return builder.getBeanDefinition();
     }
 
+    /**
+     * 注册service服务
+     */
     private void parseChildren(List<Element> childElements, BeanDefinitionBuilder builder, ParserContext parserContext) {
         ManagedList children = new ManagedList(childElements.size());
         ServiceBeanDefinitionParser parser = new ServiceBeanDefinitionParser();
         Iterator var5 = childElements.iterator();
-
         while(var5.hasNext()) {
             Element element = (Element)var5.next();
             children.add(parser.parse(element, parserContext));
         }
-
         builder.addPropertyValue("services",children);
 
     }

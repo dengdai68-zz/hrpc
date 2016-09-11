@@ -24,4 +24,10 @@ public class RpcSpringTest {
         System.out.println("============" + transport.getName());
 
     }
+
+    @Test
+    public void string(){
+        String s = "asdf/asdf/asdfasdf/asdfasdfaff/dd";
+        System.out.println(s.substring(s.lastIndexOf("/")+1));
+    }
 }

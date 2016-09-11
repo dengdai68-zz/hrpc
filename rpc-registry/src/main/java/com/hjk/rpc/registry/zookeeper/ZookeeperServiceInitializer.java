@@ -2,6 +2,7 @@ package com.hjk.rpc.registry.zookeeper;
 
 import com.hjk.rpc.common.bean.ServiceObject;
 import com.hjk.rpc.common.conf.ServerConf;
+import com.hjk.rpc.common.conf.ZookeeperConf;
 import com.hjk.rpc.registry.registry.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +19,10 @@ public class ZookeeperServiceInitializer {
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceInitializer.class);
 
     public void init(List<String> services, ServerConf server) throws Exception {
-        if (ZookeeperConf.zkconf == null) {
+        if (ZookeeperConf.getZkconf() == null) {
             throw new RuntimeException("注册中心未找到!");
         }
-        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry(ZookeeperConf.zkconf);
+        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry(ZookeeperConf.getZkconf());
         String localIp = getIp();
         //注册服务
         for (String serviceName : services) {

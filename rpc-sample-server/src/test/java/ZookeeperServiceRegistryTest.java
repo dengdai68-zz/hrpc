@@ -17,7 +17,7 @@ import java.io.IOException;
 public class ZookeeperServiceRegistryTest {
     @Test
     public void registry() throws Exception {
-        ZookeeperServiceRegistry registry = new ZookeeperServiceRegistry();
+        ZookeeperServiceRegistry registry = new ZookeeperServiceRegistry(null);
         ServiceObject serviceObject = new ServiceObject();
         serviceObject.setServiceName("testService");
         serviceObject.setServiceAddress("testServiceAddress");

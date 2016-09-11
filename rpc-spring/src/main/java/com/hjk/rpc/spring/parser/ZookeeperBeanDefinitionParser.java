@@ -12,17 +12,18 @@ import org.w3c.dom.Element;
  */
 public class ZookeeperBeanDefinitionParser extends AbstractBeanDefinitionParser {
 
-
     public ZookeeperBeanDefinitionParser() {
     }
 
     @Override
     protected AbstractBeanDefinition parseInternal(Element element, ParserContext parserContext) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(ZookeeperBean.class);
-        String zkAddress = element.getAttribute("zkAddress");
-        String sessionTimeoutInMillis = element.getAttribute("sessionTimeoutInMillis");
-        builder.addPropertyValue("zkAddress", zkAddress);
-        builder.addPropertyValue("sessionTimeoutInMillis", sessionTimeoutInMillis);
+        String address = element.getAttribute("address");
+        String sessionTimeout = element.getAttribute("sessionTimeout");
+        String connectionTimeout = element.getAttribute("connectionTimeout");
+        builder.addPropertyValue("address", address);
+        builder.addPropertyValue("sessionTimeout", sessionTimeout);
+        builder.addPropertyValue("connectionTimeout", connectionTimeout);
 
         return builder.getBeanDefinition();
     }
