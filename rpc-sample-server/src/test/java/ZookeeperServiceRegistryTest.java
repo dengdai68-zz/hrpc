@@ -1,4 +1,5 @@
-import com.hjk.rpc.registry.zookeeper.ZookeeperServiceDiscovery;
+import java.io.IOException;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -7,9 +8,8 @@ import org.apache.zookeeper.ZooKeeper;
 import org.junit.Test;
 
 import com.hjk.rpc.common.bean.ServiceObject;
+import com.hjk.rpc.registry.zookeeper.ZookeeperServiceDiscovery;
 import com.hjk.rpc.registry.zookeeper.ZookeeperServiceRegistry;
-
-import java.io.IOException;
 
 /**
  * Created by hanjk on 16/9/7.
@@ -28,7 +28,7 @@ public class ZookeeperServiceRegistryTest {
     @Test
     public void discovery() throws IOException {
         ZookeeperServiceDiscovery discovery = new ZookeeperServiceDiscovery(null);
-        String serviceAddress = discovery.discovery("testAppServer","testService");
+        String serviceAddress = discovery.discovery(null);
         System.out.println(serviceAddress);
     }
     @Test

@@ -1,18 +1,19 @@
 package com.hjk.rpc.registry.zookeeper;
 
-import com.hjk.rpc.common.conf.ZookeeperConf;
-import com.hjk.rpc.common.exception.NotFoundServiceException;
-import com.hjk.rpc.common.exception.NotFoundZookeeperPathException;
-import com.hjk.rpc.registry.discovery.ServiceDiscovery;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
+import com.hjk.rpc.common.bean.ServiceObject;
+import com.hjk.rpc.common.conf.ZookeeperConf;
+import com.hjk.rpc.common.exception.NotFoundServiceException;
+import com.hjk.rpc.registry.discovery.ServiceDiscovery;
 
 /**
  * Created by hanjk on 16/9/7.
@@ -33,9 +34,9 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
     }
 
     @Override
-    public String discovery(String appServer,String serviceName) {
+    public String discovery(final ServiceObject serviceObject) {
         try {
-            String serviceKey = appServer + "/" + serviceName;
+            String serviceKey = serviceObject.getAppServer() + "/" + serviceObject.getServiceName();
             //查找map是否缓存
             Vector<String> services = serviceCacheMap.get(serviceKey);
 
@@ -46,11 +47,9 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
                 return getRandomAddress(services);
             }
 
-            services.addAll(findServices(appServer,serviceName));
+            services.addAll(findServices(serviceKey));
             serviceCacheMap.put(serviceKey,services);
             return getRandomAddress(services);
-        }catch (NotFoundZookeeperPathException var0){
-            throw var0;
         }catch (NotFoundServiceException var1){
             throw var1;
         }catch (Exception e){
@@ -59,9 +58,9 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
         return null;
     }
 
-    private List<String> findServices(final String appServer, final String serviceName){
+    private List<String> findServices(final String serviceKey){
         //获取service path
-        String servicePath = zkconf.getRegistryPath() + "/" + appServer + "/" + serviceName;
+        String servicePath = zkconf.getRegistryPath() + "/" + serviceKey;
         if(!zkClient.exists(servicePath)){
             logger.warn("not found zookeeper registry service, servicePath:{}",servicePath);
             throw new NotFoundServiceException("not found zookeeper registry service!");
@@ -70,15 +69,14 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
         //获取service子节点
         List<String> addressList = zkClient.getChildren(servicePath);
         if (addressList == null || addressList.size() == 0) {
-            logger.warn("not found server of this service:{}", serviceName);
+            logger.warn("not found server of this service:{}", serviceKey);
             throw new NotFoundServiceException("not found server of this service!");
         }
         //订阅 服务节点变化
         zkClient.subscribeChildChanges(servicePath,new IZkChildListener(){
             @Override
             public void handleChildChange(String s, List<String> list) throws Exception {
-                ;
-                serviceCacheMap.put(appServer + s.substring(s.lastIndexOf("/")),new Vector<String>(list));
+                serviceCacheMap.put(serviceKey ,new Vector<String>(list));
             }
         });
         return addressList;
@@ -93,10 +91,6 @@ public class ZookeeperServiceDiscovery implements ServiceDiscovery {
 
 
     private static volatile ServiceDiscovery INSTANCE;
-
-    private static class SingletonHolder {
-        private static final ServiceDiscovery INSTANCE = new ZookeeperServiceDiscovery(null);
-    }
 
     public static final ServiceDiscovery getInstance() {
         if(INSTANCE == null){

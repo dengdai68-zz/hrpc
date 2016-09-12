@@ -1,5 +1,7 @@
 package com.hjk.rpc.spring.bean;
 
+import com.hjk.rpc.common.conf.ServerConf;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,10 @@ public class ServerBean {
     private String name;
     private int port;
     private List<ServiceBean> services;
+
+    public void injectionConf(){
+        new ServerConf(this.name,this.port);
+    }
 
     public List<ServiceBean> getServices() {
         return services;

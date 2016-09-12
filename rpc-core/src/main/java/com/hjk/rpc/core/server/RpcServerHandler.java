@@ -1,5 +1,12 @@
 package com.hjk.rpc.core.server;
 
+import java.util.Map;
+
+import javax.management.ServiceNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
@@ -9,11 +16,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.sf.cglib.reflect.FastClass;
 import net.sf.cglib.reflect.FastMethod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.management.ServiceNotFoundException;
-import java.util.Map;
 
 /**
  * Created by hanjk on 16/9/8.
@@ -35,7 +37,7 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
         RpcResponse response = new RpcResponse();
         try {
             request = JSON.parseObject(String.valueOf(o),RpcRequest.class);
-            logger.info("server received client:[{}] requestId:{} data:{}",ctx.channel().remoteAddress(),request.getRequestId(),o);
+            logger.info("server received client:[{}] data:{}",ctx.channel().remoteAddress(),o);
         }catch (Exception e){
             logger.error("format request object is fail",e);
             response.setResultCode(RpcResponse.FAIL);
@@ -65,7 +67,7 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
         }
         String responseStr = JSON.toJSONString(response);
         logger.debug("server return data:{}",responseStr);
-        logger.info("server return client requestId:{} data:{}",response.getRequestId(),responseStr);
+        logger.info("server return client  data:{}",responseStr);
         // 写入 RPC 响应对象并自动关闭连接
         ctx.writeAndFlush(responseStr).addListener(ChannelFutureListener.CLOSE);
     }

@@ -1,13 +1,14 @@
 package com.hjk.rpc.registry.zookeeper;
 
-import com.hjk.rpc.common.bean.ServiceObject;
-import com.hjk.rpc.common.conf.ZookeeperConf;
-import com.hjk.rpc.registry.registry.ServiceRegistry;
+import java.io.IOException;
+
 import org.I0Itec.zkclient.ZkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import com.hjk.rpc.common.bean.ServiceObject;
+import com.hjk.rpc.common.conf.ZookeeperConf;
+import com.hjk.rpc.registry.registry.ServiceRegistry;
 
 /**
  * Created by hanjk on 16/9/7.

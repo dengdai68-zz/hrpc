@@ -5,7 +5,7 @@ package com.hjk.rpc.common.conf;
  */
 public class ZookeeperConf {
 
-    private static ZookeeperConf zkconf = null;
+    private static ZookeeperConf zkconf;
     private String registryPath  = "/rpc_registry";
     private String address;
     private int sessionTimeout;
@@ -47,7 +47,7 @@ public class ZookeeperConf {
         this.address = address;
         this.sessionTimeout = sessionTimeout;
         this.connectionTimeout = connectionTimeout;
-        ZookeeperConf.zkconf = this;
+        zkconf = this;
     }
 
     public static ZookeeperConf getZkconf(){

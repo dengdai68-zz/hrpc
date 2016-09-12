@@ -1,5 +1,7 @@
 package com.hjk.rpc.spring.bean;
 
+import com.hjk.rpc.common.conf.ZookeeperConf;
+
 /**
  * Created by hanjk on 16/9/8.
  */
@@ -7,6 +9,10 @@ public class ZookeeperBean {
     private String address;
     private int sessionTimeout;
     private int connectionTimeout;
+
+    public void injectionConf(){
+        new ZookeeperConf(this.address,this.sessionTimeout,this.connectionTimeout);
+    }
 
     public String getAddress() {
         return address;

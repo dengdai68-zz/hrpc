@@ -1,5 +1,10 @@
 package com.hjk.rpc.core.client;
 
+import java.lang.reflect.Method;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
 import com.hjk.rpc.common.bean.ServiceObject;
@@ -9,13 +14,10 @@ import com.hjk.rpc.common.utils.StringUtil;
 import com.hjk.rpc.common.utils.UUIDUtil;
 import com.hjk.rpc.registry.discovery.ServiceDiscovery;
 import com.hjk.rpc.registry.zookeeper.ZookeeperServiceDiscovery;
+
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Method;
 
 /**
  * 创建代理bean
@@ -45,7 +47,7 @@ public class RpcCglibProxy{
                     ServiceDiscovery serviceDiscovery = ZookeeperServiceDiscovery.getInstance();
                     String serverAddress ;
                     try {
-                        serverAddress = serviceDiscovery.discovery(serviceObject.getAppServer(),serviceObject.getServiceName());
+                        serverAddress = serviceDiscovery.discovery(serviceObject);
                     }catch (NotFoundServiceException var){
                         logger.error("",var);
                         return null;
@@ -55,15 +57,12 @@ public class RpcCglibProxy{
                     }
                     String[] address = serverAddress.split(":");
                     RpcClient client = new RpcClient(address[0],Integer.parseInt(address[1]));
-                    logger.info("client send server:[{}] requestId:{} data:{}",serverAddress,request.getRequestId(),request);
+                    logger.info("client send server:[{}] data:{}",serverAddress,request);
                     long beginTime = System.currentTimeMillis();
                     RpcResponse response = client.send(request);
                     long endTime = System.currentTimeMillis();
-                    logger.info("client received return requestId:{} data:{}",response.getRequestId(),response);
+                    logger.info("client received return data:{}",response);
                     logger.info("client request cost time:{}",endTime - beginTime);
-                    if(response == null){
-                        throw new RpcException("远程调用异常！");
-                    }
                     if(!RpcResponse.SUCCESS.equals(response.getResultCode())){
                         throw new RpcException("远程调用异常！" + response.getErrorMsg());
                     }
