@@ -59,7 +59,7 @@
 
 > 服务启动很简单，只要把spring容器启动，会自动注册服务和监听服务
 
-##client
+##client配置
 ###spring引用服务(spring-rpc.xml)
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
