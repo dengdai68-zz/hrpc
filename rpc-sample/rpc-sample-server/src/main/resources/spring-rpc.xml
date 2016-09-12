@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rpc="http://com.hjk.rpc/schema/rpc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://com.hjk.rpc/schema/rpc http://com.hjk.rpc/schema/rpc.xsd">
+
+    <context:property-placeholder location="classpath:rpc.properties"/>
+
+    <rpc:zookeeper address="${zookeeper.address}"
+                   sessionTimeout="${zookeeper.sessionTimeout}"
+                   connectionTimeout="${zookeeper.connectionTimeout}"/>
+
+    <rpc:server name="testServer" port="1236">
+        <rpc:service class="com.hjk.rpc.sample.api.Transport"/>
+    </rpc:server>
+
+    <bean class="com.hjk.rpc.sample.server.impl.Car"/>
+
+    <!--<rpc:client server="testServer">-->
+        <!--<rpc:interface id="user" class="com.hjk.rpc.sample.api.Transport"/>-->
+    <!--</rpc:client>-->
+
+</beans>
